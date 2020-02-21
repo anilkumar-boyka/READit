@@ -1,14 +1,15 @@
 <template>
 
   <div class="hello">
-    {{name}}
-    <!-- {{titles}} -->
-   
-   <!-- <ul>
-    <li :v-for="title in titles">{{title}}</li>
-   </ul> -->
-  <!-- <h4 v-on:click="click">clickMe</h4> -->
-
+   <ol v-if="titles">
+    <li :key="title"v-for="(title,index) in titles">
+      {{title}}<br>
+      <p>Submitted by {{name[index]}}</p>
+      <p>Comments{{comments [index]}}</p>
+      <hr>
+    </li>
+   </ol>
+  
   </div>
 </template>
 
@@ -22,40 +23,47 @@ export default {
     return {
       
       titles:[],
-      name:null
+      name:[],
+      comments:[]
+      
       };
   },
   mounted:
    function()
-    {
-      var title=[];
-      var name1;
-      this.name;
-      alert('hello');
-      utils.r.getHot().map(post => post.title).then((data)=>
+    { var names;
+      var newNames;
+      var nameArray=[];
+     
+      utils.r.getHot().map(post => post).then((data)=>
       {
-        title.push(data);
-        console.log('pushed data inside'+title);
-        console.log('one yo'+title[0]);
+       console.log(Object.values(data));
+       // names=Object.values(data[0].author.name);
+       // names=names.toString();
+       // newNames=names.replace(/,/g, "");
+       // console.log('new names are\n'+newNames);
+       // this.name=newNames;
+        for(var i=0;i<data.length;i++)
+        { 
+          console.log(data[i].title);
+          console.log(data[i].num_comments);
+          this.titles.push(data[i].title);
+          // console.log('author name is'+data[i].author.name);
+          // names=Object.values(data[i].author.name);
+          //  names=names.toString();
+          //  newNames=names.replace(/,/g, "");
+          //  console.log('new names are\n'+newNames);
+           this.name.push(data[i].author.name);
+           // console.log("this name is",this.name);
+           this.comments.push(data[i].num_comments);
 
-        console.log('data is'+data);
-       this.titles.push(data);
-        name1="anil";
-        console.log(name1);
-        console.log('tttt'+this.titles[2]);
-
-      }).catch(err=>console.log(err));
-      this.name=name1;
-      console.log(this.name);
-
-      
-      utils.r.getHot().map(post => post.title).then(
-        (data)=>console.log(data[1]))
-       
+        }
         
-      
-    
-  }
+       console.log(this.titles)
+       
+       }).catch(err=>console.log('error is'+err));
+
+    },
+
 
 };
 </script>
@@ -66,14 +74,13 @@ h1, h2 {
   font-weight: normal;
 }
 ul {
-  list-style-type: none;
-  padding: 0;
+  
+  
 }
 li {
-  display: inline-block;
-  margin: 0 10px;
+        
+  text-align:left;
+  padding:10px 0px 20px 0px; 
 }
-a {
-  color: #42b983;
-}
+
 </style>
