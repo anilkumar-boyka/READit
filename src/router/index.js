@@ -4,6 +4,7 @@ import HomePage from '@/components/HomePage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
+import ImageLink from '@/components/ImageLink';
 
 
 Vue.use(Router);
@@ -16,5 +17,11 @@ export default new Router({
       name: 'HomePage',
       component: HomePage,
     },
+    {	
+    	  path: '/image/:id',
+    	  props:true,
+    	  name:'ImageLink',
+    	  component: ImageLink
+    }
   ],
 });

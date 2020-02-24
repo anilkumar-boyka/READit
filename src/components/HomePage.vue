@@ -1,30 +1,47 @@
 <template>
 
   <div class="hello">
+    <imf />
+   
    <ol v-if="titles">
+
     <li :key="title"v-for="(title,index) in titles">
-      {{title}}<br>
-      <p>Submitted by {{name[index]}}</p>
-      <p>Comments{{comments [index]}}</p>
+      <span class=" icon"><i class="fas fa-arrow-up fa-lg"></i><span class="count">{{upsCount[index]}}</span><i class="fas fa-arrow-down fa-lg"></i></span>
+
+      <div class="imgText">
+
+       <img v-on:click="imageLink" class="imgThumbnails" :src="thumbnails[index]">
+       <div class="homeInfo">
+        {{title}}
+        <p class="name">Submitted by {{name[index]}} to {{displayNames[index]}}</p>
+       </div>
+       <p class="comments">{{comments [index]}} comments</p>
+      </div>
       <hr>
     </li>
    </ol>
-  
   </div>
 </template>
 
 <script>
 import snoowrap from 'snoowrap';
 import utils from '@/utils.js';
+import imf from '@/components/ImageLink';
 
 export default {
   name: 'HomePage',
+  components:{
+    imf,
+  },
   data() {
     return {
       
       titles:[],
       name:[],
-      comments:[]
+      comments:[],
+      thumbnails:[],
+      upsCount:[],
+      displayNames:[]
       
       };
   },
@@ -37,11 +54,9 @@ export default {
       utils.r.getHot().map(post => post).then((data)=>
       {
        console.log(Object.values(data));
-       // names=Object.values(data[0].author.name);
-       // names=names.toString();
-       // newNames=names.replace(/,/g, "");
-       // console.log('new names are\n'+newNames);
-       // this.name=newNames;
+       console.log('displayname');
+       console.log(data[1].subreddit.display_name);
+       
         for(var i=0;i<data.length;i++)
         { 
           console.log(data[i].title);
@@ -55,6 +70,9 @@ export default {
            this.name.push(data[i].author.name);
            // console.log("this name is",this.name);
            this.comments.push(data[i].num_comments);
+           this.thumbnails.push(data[i].thumbnail);
+           this.upsCount.push(data[i].ups);
+           this.displayNames.push(data[i].subreddit.display_name);
 
         }
         
@@ -62,7 +80,20 @@ export default {
        
        }).catch(err=>console.log('error is'+err));
 
-    },
+  },
+  methods:{
+    imageLink:function(input){
+      console.log('hello img clicked');
+      utils.r.getHot().map(post => post).then((data)=>
+      {
+       r.getSubreddit('snoowrap').getNewComments().then(console.log);
+      });
+      console.log('ip'+input);
+      this.$router.push({name:'ImageLink',params:{Pid:proId}}); 
+      console.log("pushed");
+
+    }
+  }
 
 
 };
@@ -82,5 +113,39 @@ li {
   text-align:left;
   padding:10px 0px 20px 0px; 
 }
-
+img{
+  float: left;
+}
+.homeInfo{
+  margin-left: 190px;
+  font-size: 13px;
+}
+.comments{
+  margin-left: 190px;
+  font-family: 'Anton';
+  font-size: small;
+  font-size: 10px;
+}
+.name{
+  color: #888;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.imgThumbnails{
+  width: 100px;
+  height: 80px;
+  padding-left: 10px;
+}
+.icon{
+  color:#888;
+  float: left;
+}
+.count{
+  min-width: 45px;
+  display: inline-block;
+  padding:0px  2px 0 2px;
+}
+.imgText{
+  margin-left: 19px;
+}
 </style>
