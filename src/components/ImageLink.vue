@@ -1,9 +1,14 @@
 <template>
 
   <div class="hello">
-   
-   <h1 @click="data">hello</h1>   
-   {{id}}  
+    
+    <div :key="image"v-for="(image,index) in images">
+      <div v-if="id==index">
+        <img :src="images[index]">
+    </div>
+    </div>
+
+
   </div>
 </template>
 
@@ -16,16 +21,27 @@ export default {
   props:['id'],
   data() {
     return {
-    	person:null,
+    	imgId:this.$route.params.id,
+      images:[]
     };
   },
-  methods:{
-  	data:function()
+  
+  mounted:
+  	function()
   	{
-  		console.log('images');
-  		this.person=id;
+  		utils.r.getHot().map(post => post).then((data)=>
+      {
+        console.log('dataAhead')
+        // console.log(data[25].url);
+        for(var i=0;i<data.length;i++)
+        { 
+          this.images.push(data[i].url);
+        }
+
+      }).catch(err=>console.log('error is'+err));
+  		
   	}
-  }
+  
 };
 </script>
 

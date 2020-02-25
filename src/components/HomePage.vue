@@ -1,16 +1,14 @@
 <template>
 
   <div class="hello">
-    <imf />
-   
-   <ol v-if="titles">
+    <ol v-if="titles">
 
     <li :key="title"v-for="(title,index) in titles">
       <span class=" icon"><i class="fas fa-arrow-up fa-lg"></i><span class="count">{{upsCount[index]}}</span><i class="fas fa-arrow-down fa-lg"></i></span>
 
       <div class="imgText">
 
-       <img v-on:click="imageLink" class="imgThumbnails" :src="thumbnails[index]">
+       <img v-on:click="imageLink(index)" class="imgThumbnails" :src="thumbnails[index]">
        <div class="homeInfo">
         {{title}}
         <p class="name">Submitted by {{name[index]}} to {{displayNames[index]}}</p>
@@ -26,13 +24,10 @@
 <script>
 import snoowrap from 'snoowrap';
 import utils from '@/utils.js';
-import imf from '@/components/ImageLink';
+
 
 export default {
   name: 'HomePage',
-  components:{
-    imf,
-  },
   data() {
     return {
       
@@ -47,20 +42,42 @@ export default {
   },
   mounted:
    function()
-    { var names;
+    { 
+      var names;
       var newNames;
       var nameArray=[];
+      var c;
+      console.log('new util')
+      // utils.r.getHotComments().then(console.log);
+      //starts here
+      utils.r.getHot({limit: 25}).then(myListing => {
+        console.log(myListing);
+        console.log(myListing.length); // => 25
+        myListing.fetchMore({amount: 10}).then(extendedListing => {
+        console.log(extendedListing.length);
+        console.log('new list count')
+        console.log(extendedListing) // => 35
+       })
+        });//ends here
+      // c=utils.r.getComment('f8ssz0')
+      // utils.r.getComment('f8ssz0').then(console.log)
+      // c=utils.r.getComment('f8ssz0');
+
+      // utils.submission.comments.fetchMore()
+      // console.log("using r new");
+      console.log(c);
      
       utils.r.getHot().map(post => post).then((data)=>
       {
        console.log(Object.values(data));
-       console.log('displayname');
-       console.log(data[1].subreddit.display_name);
+       console.log('comments');
+       console.log();
+
        
         for(var i=0;i<data.length;i++)
         { 
-          console.log(data[i].title);
-          console.log(data[i].num_comments);
+          // console.log(data[i].title);
+          // console.log(data[i].num_comments);
           this.titles.push(data[i].title);
           // console.log('author name is'+data[i].author.name);
           // names=Object.values(data[i].author.name);
@@ -76,21 +93,22 @@ export default {
 
         }
         
-       console.log(this.titles)
+       // console.log(this.titles)
        
        }).catch(err=>console.log('error is'+err));
 
   },
   methods:{
-    imageLink:function(input){
-      console.log('hello img clicked');
-      utils.r.getHot().map(post => post).then((data)=>
-      {
-       r.getSubreddit('snoowrap').getNewComments().then(console.log);
-      });
-      console.log('ip'+input);
-      this.$router.push({name:'ImageLink',params:{Pid:proId}}); 
-      console.log("pushed");
+    imageLink:function(indexId){
+      // console.log('hello img clicked');
+      // utils.r.getHot().map(post => post).then((data)=>
+      // {
+      //  r.getSubreddit('snoowrap').getNewComments().then(console.log);
+      // });
+      // console.log("input indexId");
+      // console.log(indexId);
+      this.$router.push({name:'ImageLink',params:{id:indexId}}); 
+      
 
     }
   }
@@ -147,5 +165,8 @@ img{
 }
 .imgText{
   margin-left: 19px;
+}
+.hello{
+  background-color: #f6eec7;
 }
 </style>
