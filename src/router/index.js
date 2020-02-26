@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import ImageLink from '@/components/ImageLink';
+import  nextPage from '@/components/PageSurfing';
 
 
 Vue.use(Router);
@@ -22,6 +23,11 @@ export default new Router({
     	  props:true,
     	  name:'ImageLink',
     	  component: ImageLink
+    },
+    {
+      path:'/nextPage/:id',
+      name:'PageSurfing',
+      component:nextPage
     }
   ],
 });

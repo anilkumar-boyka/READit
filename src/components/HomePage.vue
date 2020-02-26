@@ -18,6 +18,10 @@
       <hr>
     </li>
    </ol>
+    limit is {{limit}}
+   <div class="nextPage">view more:
+    <span v-on:click="pageSurfing">next</span>
+   </div>
   </div>
 </template>
 
@@ -36,7 +40,8 @@ export default {
       comments:[],
       thumbnails:[],
       upsCount:[],
-      displayNames:[]
+      displayNames:[],
+      limit:null
       
       };
   },
@@ -50,15 +55,15 @@ export default {
       console.log('new util')
       // utils.r.getHotComments().then(console.log);
       //starts here
-      utils.r.getHot({limit: 25}).then(myListing => {
-        console.log(myListing);
-        console.log(myListing.length); // => 25
-        myListing.fetchMore({amount: 10}).then(extendedListing => {
-        console.log(extendedListing.length);
-        console.log('new list count')
-        console.log(extendedListing) // => 35
-       })
-        });//ends here
+      // utils.r.getHot({limit: 25}).then(myListing => {
+      //   console.log(myListing);
+      //   console.log(myListing.length); // => 25
+      //   myListing.fetchMore({amount: 10}).then(extendedListing => {
+      //   console.log(extendedListing.length);
+        // console.log('new list count')
+        // console.log(extendedListing) // => 35
+       // })
+       //  });//ends here
       // c=utils.r.getComment('f8ssz0')
       // utils.r.getComment('f8ssz0').then(console.log)
       // c=utils.r.getComment('f8ssz0');
@@ -84,12 +89,13 @@ export default {
           //  names=names.toString();
           //  newNames=names.replace(/,/g, "");
           //  console.log('new names are\n'+newNames);
-           this.name.push(data[i].author.name);
-           // console.log("this name is",this.name);
-           this.comments.push(data[i].num_comments);
-           this.thumbnails.push(data[i].thumbnail);
-           this.upsCount.push(data[i].ups);
-           this.displayNames.push(data[i].subreddit.display_name);
+          this.name.push(data[i].author.name);
+          // console.log("this name is",this.name);
+          this.comments.push(data[i].num_comments);
+          this.thumbnails.push(data[i].thumbnail);
+          this.upsCount.push(data[i].ups);
+          this.displayNames.push(data[i].subreddit.display_name);
+          this.limit=data.length;
 
         }
         
@@ -110,6 +116,33 @@ export default {
       this.$router.push({name:'ImageLink',params:{id:indexId}}); 
       
 
+    },
+    pageSurfing:function(input)
+    { 
+      var l=25;
+      var count=l+25;
+      console.log(input)
+      console.log('page');
+
+      
+      utils.r.getHot({limit: l}).then(myListing => {
+           console.log('l is'+l);
+        // console.log(myListing);
+        // console.log(myListing.length); // => 25
+        myListing.fetchMore({amount: (l+25)}).then(extendedListing => {
+           console.log("ext is \n"+extendedListing.length);
+          // console.log('new list count')
+          for(var i=l;i<l+25;i++)
+          // console.log(extendedListing[i])
+          this.$router.push({name:'PageSurfing',params:{id:l}}).catch(error => {
+          if (error.name != "NavigationDuplicated") {
+            throw error;
+          }
+        });
+                 
+         // this.$router.push({name:'PageSurfing'}); 
+        })
+      });
     }
   }
 
@@ -122,8 +155,8 @@ export default {
 h1, h2 {
   font-weight: normal;
 }
-ul {
-  
+.nextPage{
+  text-align: left;
   
 }
 li {
