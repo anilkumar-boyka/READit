@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Bootstrap />
-   <router-view/>
+   <router-view :key="$route.path">
+    
+   </router-view>
   </div>
 </template>
 
@@ -13,6 +15,12 @@ export default {
     Bootstrap
   },
   name: 'App',
+  data(){
+    return{
+      route:this.$route.path,
+
+    }
+  }
 };
 </script>
 

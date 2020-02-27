@@ -1,16 +1,14 @@
 <template>
   
 	<div class="hello">
-		{{pageId}}
-		
-		<ol start="26" v-if="titles">
+		<ol :start="olCount" v-if="titles">
 
 			<li :key="title"v-for="(title,index) in titles">
 			  <span class=" icon"><i class="fas fa-arrow-up fa-lg"></i><span class="count">{{upsCount[index]}}</span><i class="fas fa-arrow-down fa-lg"></i></span>
 
 			  <div class="imgText">
 
-			   <img v-on:click="imageLink(index)" class="imgThumbnails" :src="thumbnails[index]">
+			   <img v-on:click="imageLink(olCount+index-1)" class="imgThumbnails" :src="thumbnails[index]">
 			   <div class="homeInfo">
 				 {{title}}
 				 <p class="name">Submitted by {{name[index]}} to {{displayNames[index]}}</p>
@@ -20,9 +18,11 @@
 			  <hr>
 			</li>
 	   </ol>
-	   <div class="nextPage">view more:
-    <span v-on:click="pageSurfing">next</span>
-   </div>
+ 		<div class="nextPage">
+	   		view more:
+    		<span v-on:click="pageSurfing"><button type="button">next</button></span>
+   		</div>
+   
   
    </div>
   </div>
@@ -42,15 +42,17 @@ export default {
 		  thumbnails:[],
 		  upsCount:[],
 		  displayNames:[],
-		  pageId:null
+		  pageId:null,
+		  key:null,
+		  olCount:null
 		}
 	},
 	methods:{
 		pageSurfing:function()
 		{   
-			console.log('initially'+this.pageId)
+			// console.log('initially'+this.pageId)
 			
-			this.$router.push({name:'PageSurfing',params:{id:this.pageId+25}}).then(this.pageId=this.$route.params.id).then(console.log(console.log('after'+this.pageId))).catch(error => {
+			this.$router.push({name:'PageSurfing',params:{id:this.pageId +25}}).then(this.pageId=this.$route.params.id).then(console.log(console.log('after'+this.pageId))).catch(error => {
           		if (error.name != "NavigationDuplicated") {
             	throw error;
              	}
@@ -61,27 +63,36 @@ export default {
         
 
 		},
+		imageLink:function(olCount)
+		{	
+			// console.log('olCount')
+			// console.log(olCount)
+        	this.$router.push({name:'ImageLink',params:{id:olCount}}); 
+      
+
+   		},
 		start:function()
 		{ 
+		  var l;		
           console.log('yoooo');
+          console.log(this.$route.path);
 		  this.pageId=this.$route.params.id;
-		  
-		  var l=this.pageId;
-		  var newListCount=l;
-		  var c=90;
+		  l=this.pageId;
+		  this.olCount=l+1;
 		  console.log('l is'+l)
 		  console.log('new util')
 	
 		 
-		  utils.r.getHot({limit:25}).then(data=>
-		  {
-			   console.log('limit is'+data.length);
+		  utils.r.getHot({limit:l}).then(data=>
+		  {	
+		  	 //   console.log('l inside util'+l)
+			   // console.log('limit is'+data.length);
 			   // console.log(data);
-			 data.fetchMore({amount: c+25}).then(newExtendedData => {
-			   console.log('ext in'+newExtendedData.length);
-			   console.log('new list count')
-			   console.log(newExtendedData);
-			   console.log("title is\n"+newExtendedData[26].title);
+			 data.fetchMore({amount:25}).then(newExtendedData => {
+			   // console.log('ext in'+newExtendedData.length);
+			   // console.log('new list count')
+			   // console.log(newExtendedData);
+			   // console.log("title is\n"+newExtendedData[26].title);
 			   console.log('loop starts here')
 			   for(var i=l;i<newExtendedData.length;i++)
 				{ 
@@ -93,6 +104,7 @@ export default {
 				  this.thumbnails.push(newExtendedData[i].thumbnail);
 				  this.upsCount.push(newExtendedData[i].ups);
 				  this.displayNames.push(newExtendedData[i].subreddit.display_name);
+				  // console.log('loop')
 				   
 				}
 				 
@@ -155,7 +167,11 @@ img{
 .hello{
   background-color: #f6eec7;
 }
-
+.nextPage{
+  text-align: left;
+  padding:20px;
+  
+}
 
 
 </style>

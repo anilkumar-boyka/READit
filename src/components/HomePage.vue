@@ -18,9 +18,8 @@
       <hr>
     </li>
    </ol>
-    limit is {{limit}}
    <div class="nextPage">view more:
-    <span v-on:click="pageSurfing">next</span>
+    <span v-on:click="pageSurfing"><button type="button">next</button></span>
    </div>
   </div>
 </template>
@@ -53,6 +52,7 @@ export default {
       var nameArray=[];
       var c;
       console.log('new util')
+      
       // utils.r.getHotComments().then(console.log);
       //starts here
       // utils.r.getHot({limit: 25}).then(myListing => {
@@ -75,8 +75,8 @@ export default {
       utils.r.getHot().map(post => post).then((data)=>
       {
        console.log(Object.values(data));
-       console.log('comments');
-       console.log();
+       // console.log('comments');
+       // console.log();
 
        
         for(var i=0;i<data.length;i++)
@@ -112,7 +112,7 @@ export default {
       //  r.getSubreddit('snoowrap').getNewComments().then(console.log);
       // });
       // console.log("input indexId");
-      // console.log(indexId);
+      console.log(indexId);
       this.$router.push({name:'ImageLink',params:{id:indexId}}); 
       
 
@@ -124,15 +124,15 @@ export default {
       console.log(input)
       console.log('page');
 
-      
-      utils.r.getHot({limit: l}).then(myListing => {
-           console.log('l is'+l);
+      // //starts
+      // utils.r.getHot({limit: l}).then(myListing => {
+      //      console.log('l is'+l);
         // console.log(myListing);
-        // console.log(myListing.length); // => 25
-        myListing.fetchMore({amount: (l+25)}).then(extendedListing => {
-           console.log("ext is \n"+extendedListing.length);
+        // // console.log(myListing.length); // => 25
+        // myListing.fetchMore({amount: l}).then(extendedListing => {
+        //    console.log("ext is \n"+extendedListing.length);
           // console.log('new list count')
-          for(var i=l;i<l+25;i++)
+          // for(var i=l;i<extendedListing.length;i++)
           // console.log(extendedListing[i])
           this.$router.push({name:'PageSurfing',params:{id:l}}).catch(error => {
           if (error.name != "NavigationDuplicated") {
@@ -141,8 +141,9 @@ export default {
         });
                  
          // this.$router.push({name:'PageSurfing'}); 
-        })
-      });
+      //   })
+      // });
+      //ends
     }
   }
 
@@ -157,6 +158,7 @@ h1, h2 {
 }
 .nextPage{
   text-align: left;
+  padding: 20px;
   
 }
 li {
