@@ -13,7 +13,7 @@
         {{title}}
         <p class="name">Submitted by {{name[index]}} to {{displayNames[index]}}</p>
        </div>
-       <p class="comments">{{comments [index]}} comments</p>
+       <p class="comments" v-on:click="commentPage">{{comments [index]}} comments</p>
       </div>
       <hr>
     </li>
@@ -116,6 +116,10 @@ export default {
       this.$router.push({name:'ImageLink',params:{id:indexId}}); 
       
 
+    },
+    commentPage:function()
+    {
+      console.log('helllo comments')
     },
     pageSurfing:function(input)
     { 

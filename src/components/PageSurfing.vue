@@ -109,7 +109,7 @@ export default {
 				}
 				 
 			 })
-		   }).catch(err=>console.log('error is'+err));
+		   })
 
 
 

@@ -30,11 +30,54 @@ export default {
   mounted:
   	function()
   	{ 
-      const comments = new CommentStream(utils.r, { subreddit: "AskReddit", limit: 10,pollTime: 10000});
-        comments.on("item", console.log);
+     
 
-      utils.r.getHot({limit:1}).then(data=>
+      // const comments = new CommentStream(utils.r, { subreddit: "Justrolledintotheshop", limit: 10,pollTime: 10000});
+      // comments.on('item', (item) => {
+        
+      //     console.log(item);
+      //     utils.r.getComment(item.parent_id).fetch().then(parentComment => {
+      //         console.log(parentComment.body);
+      //     });
+      // });
+       utils.r.getSubmission('fald9v').expandReplies({limit: 2, depth: 1}).then(CommentData=>
+        {
+          for(var i=0;i<100;i++)
+          console.log(CommentData.comments[i].body);
+        }
+        );
+      //   comments.on("item", console.log);
+        console.log('commens section')
+        // console.log(utils.r.getComment('t1_f37dwqc'));
+        // console.log('try')
+        // console.log(utils.r.getComment('yo'));
+        console.log('using username')
+        // utils.r.getHot().then(sumbission =>{submission.comments.fetchMore()}
+        // utils.r.getHot().then(listing => {
+        //   console.log(listing)
+        //   console.log(listing.map(c => c.id))
+        // })
+        // utils.r.getUser('c0hkuyq').getComments().then(console.log)
+        // console.log(utils.r.getComment('c0hkuyq')); 
+        // console.log(utils.r.getComment('t1_c0hkuyq'));
+        // console.log('new')
+        // utils.r.getComment('c0b6xx0').fetch().then(comment => comment.body).then(console.log)
+        // console.log(utils.r.getComments); 
+        //json data
+        // $.getJSON("http://www.reddit.com/r/" + 'JustrolledintotheshopJustrolledintotheshop' + "/comments/" + 'c0hkuyq'+ ".json?", function (data){
+        //   console.log('data is')
+        //   console.log(data)
+        //   $.each(data[1].data.children, function (i, item) {
+        //     var comment = item.data.body
+        //     var author = item.data.author
+        //     var postcomment = '<p>[Author]' + author + '<br>' + comment + '</p>'
+        //     results.append(postcomment)
+        //   });
+        // });
+        //json data ends here
+        utils.r.getHot({limit:1}).then(data=>
       { 
+
          // console.log('l inside util'+l)
          // console.log('limit is'+data.length);
          // console.log(data);
