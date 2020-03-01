@@ -3,12 +3,14 @@
   <div>
     <h1 class="title">{{title}}</h1>
     
-    <ul v-if="comments">
+    <ul class="unorderList" v-if="comments">
       <li :key="title" v-for="(comment,index) in comments">
         <div>
 
         </div>
-        <div class=comments><i class=" icon fas fa-cog fa-lg"></i> {{comment}}</div>
+        <div class=comments><i class=" icon fas fa-cog fa-lg"></i> {{comment}}
+        <div class=commentName>comment by {{commentName[index]}}</div>
+        </div>
       </li>
     </ul>
     
@@ -29,6 +31,7 @@ export default {
      routeId:this.$route.params.id,
      commentId:null,
      comments:[],
+     commentName:[],
      title:null
       
     };
@@ -58,9 +61,16 @@ export default {
           console.log(this.commentId)
           utils.r.getSubmission(this.commentId).expandReplies({limit: 2, depth: 1}).then(CommentData=>
         {
+           console.log(CommentData.comments)
+           console.log(CommentData.comments[1].author.name)
           for(var i=0;i<100;i++)
-          this.comments.push(CommentData.comments[i].body);
-          console.log(CommentData.comments[i].body);
+          {
+                this.comments.push(CommentData.comments[i].body);
+                 this.commentName.push(CommentData.comments[i].author.name)
+                // console.log(CommentData.comments[i].body);
+                // console.log(CommentData.comments[i].name)
+          }
+          
         }
         );
         }
@@ -91,5 +101,13 @@ export default {
 }
 .icon{
   padding-right: 20px;
+}
+.unorderList{
+  list-style-type:none
+}
+.commentName{
+  padding-left: 40px;
+  font-family: 'Squada One';
+  color:black;
 }
 </style>

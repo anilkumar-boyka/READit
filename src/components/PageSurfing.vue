@@ -13,7 +13,7 @@
 				 {{title}}
 				 <p class="name">Submitted by {{name[index]}} to {{displayNames[index]}}</p>
 			    </div>
-			   <p class="comments" v-on:click="comments">{{comments [index]}} comments</p>
+			   <p class="comments" v-on:click="commentsFunction(olCount+index-1)">{{comments [index]}} comments</p>
 			  </div>
 			  <hr>
 			</li>
@@ -71,7 +71,7 @@ export default {
       
 
 		   },
-		   commentsFunction:function()
+		   commentsFunction:function(indexId)
 		   {
 			 console.log('hello')  
 			 console.log(indexId)
