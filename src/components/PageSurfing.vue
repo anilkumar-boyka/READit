@@ -13,7 +13,7 @@
 				 {{title}}
 				 <p class="name">Submitted by {{name[index]}} to {{displayNames[index]}}</p>
 			    </div>
-			   <p class="comments">{{comments [index]}} comments</p>
+			   <p class="comments" v-on:click="comments">{{comments [index]}} comments</p>
 			  </div>
 			  <hr>
 			</li>
@@ -70,7 +70,17 @@ export default {
         	this.$router.push({name:'ImageLink',params:{id:olCount}}); 
       
 
-   		},
+		   },
+		   commentsFunction:function()
+		   {
+			 console.log('hello')  
+			 console.log(indexId)
+			 this.$router.push({name:'comments',params:{id:indexId}}).catch(error => {
+				if (error.name != "NavigationDuplicated") {
+					throw error;
+				}
+			 });
+		   },
 		start:function()
 		{ 
 		  var l;		

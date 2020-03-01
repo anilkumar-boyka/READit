@@ -13,7 +13,7 @@
         {{title}}
         <p class="name">Submitted by {{name[index]}} to {{displayNames[index]}}</p>
        </div>
-       <p class="comments" v-on:click="commentPage">{{comments [index]}} comments</p>
+       <p class="comments" v-on:click="commentPage(index)">{{comments [index]}} comments</p>
       </div>
       <hr>
     </li>
@@ -117,9 +117,16 @@ export default {
       
 
     },
-    commentPage:function()
+    commentPage:function(indexId)
     {
       console.log('helllo comments')
+      console.log(indexId)
+      // this.$router.push({name:'comments'}) 
+       this.$router.push({name:'comments',params:{id:indexId}}).catch(error => {
+          if (error.name != "NavigationDuplicated") {
+            throw error;
+          }
+        });
     },
     pageSurfing:function(input)
     { 

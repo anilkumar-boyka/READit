@@ -6,7 +6,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import ImageLink from '@/components/ImageLink';
 import  nextPage from '@/components/PageSurfing';
-
+import  comments from '@/components/comments';
 
 Vue.use(Router);
 Vue.use(BootstrapVue);
@@ -28,6 +28,11 @@ export default new Router({
       path:'/nextPage/:id',
       name:'PageSurfing',
       component:nextPage
+    },
+    {
+      path:'/commentPage/:id',
+      name:'comments',
+      component:comments
     }
   ],
 });

@@ -1,8 +1,9 @@
 <template>
 
-  <div class="hello">
+  <div class="comments">
+    <i class="fas fa-cog"></i>
     <!-- imageLink{{imgId}} -->
-    <div :key="image"v-for="(image,index) in images">
+    <div :key="image" v-for="(image,index) in images">
       <div v-if="imgId==index">
         <img :src="images[index]">
       </div>
