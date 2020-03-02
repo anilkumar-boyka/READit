@@ -11,7 +11,8 @@
        <img v-on:click="imageLink(index)" class="imgThumbnails" :src="thumbnails[index]">
        <div class="homeInfo">
         {{title}}
-        <p class="name">Submitted by {{name[index]}} to {{displayNames[index]}}</p>
+        <p class="name">Submitted on {{dateArray[index]}}
+        by {{name[index]}} to {{displayNames[index]}}</p>
        </div>
        <p class="comments" v-on:click="commentPage(index)">{{comments [index]}} comments</p>
       </div>
@@ -40,7 +41,8 @@ export default {
       thumbnails:[],
       upsCount:[],
       displayNames:[],
-      limit:null
+      limit:null,
+      dateArray:[]
       
       };
   },
@@ -51,6 +53,11 @@ export default {
       var newNames;
       var nameArray=[];
       var c;
+      var date;
+      var hours;
+      var today;
+      var currentDate;
+      var d,n;
       console.log('new util')
       
       // utils.r.getHotComments().then(console.log);
@@ -70,17 +77,24 @@ export default {
 
       // utils.submission.comments.fetchMore()
       // console.log("using r new");
-      console.log(c);
+      // console.log(c);
      
       utils.r.getHot().map(post => post).then((data)=>
       {
-       console.log(Object.values(data));
-       // console.log('comments');
-       // console.log();
 
+       console.log(Object.values(data));
+       console.log(data[0].created_utc)
+       date=new Date(data[0].created_utc*1000)
+       
+       console.log(date)
+       
+        today = new Date();
+        currentDate = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+       
        
         for(var i=0;i<data.length;i++)
         { 
+          date=new Date(data[i].created_utc*1000)
           // console.log(data[i].title);
           // console.log(data[i].num_comments);
           this.titles.push(data[i].title);
@@ -96,6 +110,8 @@ export default {
           this.upsCount.push(data[i].ups);
           this.displayNames.push(data[i].subreddit.display_name);
           this.limit=data.length;
+          this.dateArray.push(date);
+          console.log('da is'+date)
 
         }
         
@@ -112,15 +128,15 @@ export default {
       //  r.getSubreddit('snoowrap').getNewComments().then(console.log);
       // });
       // console.log("input indexId");
-      console.log(indexId);
+      // console.log(indexId);
       this.$router.push({name:'ImageLink',params:{id:indexId}}); 
       
 
     },
     commentPage:function(indexId)
     {
-      console.log('helllo comments')
-      console.log(indexId)
+      // console.log('helllo comments')
+      // console.log(indexId)
       // this.$router.push({name:'comments'}) 
        this.$router.push({name:'comments',params:{id:indexId}}).catch(error => {
           if (error.name != "NavigationDuplicated") {

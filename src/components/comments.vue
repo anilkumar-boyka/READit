@@ -1,17 +1,24 @@
 <template>
 
-  <div>
-    <h1 class="title">{{title}}</h1>
+  <div class="main">
+     <h1 v-if="title"class="title">{{title}}</h1>
+     <div>
+        <img class="images" :src="images">
+      </div>
+      <hr>
     
-    <ul class="unorderList" v-if="comments">
-      <li :key="title" v-for="(comment,index) in comments">
+      <ul class="unorderList" v-if="comments">
         <div>
-
-        </div>
-        <div class=comments><i class=" icon fas fa-cog fa-lg"></i> {{comment}}
-        <div class=commentName>comment by {{commentName[index]}}</div>
-        </div>
-      </li>
+          <li :key="comment" v-for="(comment,index) in comments">
+            <div class=comments>
+              <i class=" icon fas fa-cog fa-lg"></i> 
+              {{comment}}
+              <div class="commentName">
+                comment by  <span class="name">{{commentName[index]}}</span>
+              </div>
+            </div>
+          </li>
+      </div>
     </ul>
     
 
@@ -32,7 +39,8 @@ export default {
      commentId:null,
      comments:[],
      commentName:[],
-     title:null
+     title:null,
+     images:null
       
     };
   },
@@ -40,29 +48,30 @@ export default {
   mounted:
   	function()
      {
-       console.log("cmt is")
-       console.log(this.routeId)
+       // console.log("cmt is")
+       // console.log(this.routeId)
        utils.r.getHot({limit:100}).then(
         data=>
         {
-          console.log(data);
+          // console.log(data);
           for(var i=0;i<101;i++){
             if(this.routeId==i){
-              console.log(i)
-              console.log('inside')
+              // console.log(i)
+              // console.log('inside')
               this.commentId=data[i].id;
-              console.log(this.commentId)
+              // console.log(this.commentId)
               this.title=data[i].title;
+              this.images=data[i].url;
               
             }
             
           }
-          console.log('commentid')
-          console.log(this.commentId)
+          // console.log('commentid')
+          // console.log(this.commentId)
           utils.r.getSubmission(this.commentId).expandReplies({limit: 2, depth: 1}).then(CommentData=>
         {
-           console.log(CommentData.comments)
-           console.log(CommentData.comments[1].author.name)
+           // console.log(CommentData.comments)
+           // console.log(CommentData.comments[1].author.name)
           for(var i=0;i<100;i++)
           {
                 this.comments.push(CommentData.comments[i].body);
@@ -101,13 +110,29 @@ export default {
 }
 .icon{
   padding-right: 20px;
+  min-height: 20px;
 }
 .unorderList{
   list-style-type:none
 }
 .commentName{
-  padding-left: 40px;
-  font-family: 'Squada One';
+  padding-left: 45px;
+  font-family: 'Sorts Mill Goudy';
   color:black;
+  padding-bottom: 20px;
+  /*opacity: 0.7;*/
+}
+.main{
+  background-color: #f1f3f4;
+}
+
+.images{
+  height: 300px;
+  width: 500px;
+}
+.name{
+  font-family: 'Rubik Mono One';
+  font-size: 12px;
+  opacity:0.6;
 }
 </style>

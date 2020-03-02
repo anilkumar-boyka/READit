@@ -1,11 +1,11 @@
 <template>
 
   <div class="comments">
-    <i class="fas fa-cog"></i>
+    <!-- <i class="fas fa-cog"></i> -->
     <!-- imageLink{{imgId}} -->
     <div :key="image" v-for="(image,index) in images">
       <div v-if="imgId==index">
-        <img :src="images[index]">
+        <img class="image":src="images[index]">
       </div>
     </div>
 
@@ -120,6 +120,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.image{
+  width: 900px;
+  height: 600px;
+  border:solid 15px;
+  border-color: black;
+}
 
  
 </style>

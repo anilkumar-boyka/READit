@@ -1,5 +1,5 @@
 <template>
-  
+  //before removing fetch more
 	<div class="hello">
 		<ol :start="olCount" v-if="titles">
 
@@ -11,23 +11,19 @@
 			   <img v-on:click="imageLink(olCount+index-1)" class="imgThumbnails" :src="thumbnails[index]">
 			   <div class="homeInfo">
 				 {{title}}
-				 <p class="name">Submitted on {{dateArray[index]}}
-				 by {{name[index]}} to {{displayNames[index]}}</p>
+				 <p class="name">Submitted by {{name[index]}} to {{displayNames[index]}}</p>
 			    </div>
 			   <p class="comments" v-on:click="commentsFunction(olCount+index-1)">{{comments [index]}} comments</p>
 			  </div>
 			  <hr>
 			</li>
 	   </ol>
-	   	<div>
-	 		<div class="nextPage">
-		   		view more:
-	    		<span  v-on:click="pageSurfing"><button v-once type="button">next</button></span>
-	   		
-	   		<!-- <div v-else>
-	   			Oops!No posts found
-	   		</div>	 -->
-	   		</div>
+ 		<div class="nextPage">
+	   		view more:
+    		<span v-on:click="pageSurfing"><button type="button">next</button></span>
+   		</div>
+   
+  
    </div>
   </div>
 
@@ -46,11 +42,9 @@ export default {
 		  thumbnails:[],
 		  upsCount:[],
 		  displayNames:[],
-		  dateArray:[],
 		  pageId:null,
 		  key:null,
-		  olCount:null,
-		  titleCount:null
+		  olCount:null
 		}
 	},
 	methods:{
@@ -89,9 +83,8 @@ export default {
 		   },
 		start:function()
 		{ 
-		  var l;	
-		  var date;	
-          // console.log('yoooo');
+		  var l;		
+          console.log('yoooo');
           console.log(this.$route.path);
 		  this.pageId=this.$route.params.id;
 		  l=this.pageId;
@@ -100,41 +93,33 @@ export default {
 		  console.log('new util')
 	
 		 
-		  utils.r.getHot({limit:100}).then(data=>
+		  utils.r.getHot({limit:l}).then(data=>
 		  {	
-		  	   // console.log('l inside util'+l)
-		  	   // console.log(data)
+		  	 //   console.log('l inside util'+l)
 			   // console.log('limit is'+data.length);
 			   // console.log(data);
-			 // data.fetchMore({amount:25}).then(newExtendedData => {
+			 data.fetchMore({amount:25}).then(newExtendedData => {
 			   // console.log('ext in'+newExtendedData.length);
 			   // console.log('new list count')
 			   // console.log(newExtendedData);
 			   // console.log("title is\n"+newExtendedData[26].title);
 			   console.log('loop starts here')
-			   for(var i=l;i<l+26;i++)
+			   for(var i=l;i<newExtendedData.length;i++)
 				{ 
-					console.log(l+26)
-				  console.log(data[27].title)	
-				  date=new Date(data[i].created_utc*1000)
 				  // console.log('inside loop'+newExtendedData[4].title);
-				  this.titles.push(data[i].title);
-				  this.dateArray.push(date);
-				  this.name.push(data[i].author.name);
-				  this.comments.push(data[i].num_comments);
-				  this.thumbnails.push(data[i].thumbnail);
-				  this.upsCount.push(data[i].ups);
-				  this.displayNames.push(data[i].subreddit.display_name);
-				  // console.log(data[i].title)
+				  this.titles.push(newExtendedData[i].title);
 				  
+				  this.name.push(newExtendedData[i].author.name);
+				  this.comments.push(newExtendedData[i].num_comments);
+				  this.thumbnails.push(newExtendedData[i].thumbnail);
+				  this.upsCount.push(newExtendedData[i].ups);
+				  this.displayNames.push(newExtendedData[i].subreddit.display_name);
 				  // console.log('loop')
 				   
 				}
-				console.log('title count is'+this.titles.length);
-				this.titleCount=this.titles.length;
 				 
-			 // })
-		   }).catch(err=>console.log('error is'+err));
+			 })
+		   })
 
 
 
