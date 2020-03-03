@@ -4,13 +4,13 @@
     <ol v-if="titles">
 
     <li :key="title"v-for="(title,index) in titles">
-      <span class=" icon"><i class="fas fa-arrow-up fa-lg"></i><span class="count">{{upsCount[index]}}</span><i class="fas fa-arrow-down fa-lg"></i></span>
+      <span class=" icon"><i v-on:click="iconUpvote(index)" class="fas fa-arrow-up fa-lg"></i><span class="count">{{upsCount[index]}}</span><i v-on:click="downVote(index)"class="fas fa-arrow-down fa-lg"></i></span>
 
       <div class="imgText">
 
        <img v-on:click="imageLink(index)" class="imgThumbnails" :src="thumbnails[index]">
        <div class="homeInfo">
-        {{title}}
+        <span class="title">{{title}}</span>
         <p class="name">Submitted on {{dateArray[index]}}
         by {{name[index]}} to {{displayNames[index]}}</p>
        </div>
@@ -42,7 +42,9 @@ export default {
       upsCount:[],
       displayNames:[],
       limit:null,
-      dateArray:[]
+      dateArray:[],
+      upvote:null,
+      downvote:null
       
       };
   },
@@ -86,7 +88,7 @@ export default {
        console.log(data[0].created_utc)
        date=new Date(data[0].created_utc*1000)
        
-       console.log(date)
+       // console.log(date)
        
         today = new Date();
         currentDate = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -95,6 +97,9 @@ export default {
         for(var i=0;i<data.length;i++)
         { 
           date=new Date(data[i].created_utc*1000)
+          // str.replace("date",);
+          date=date.toString();
+          date=date.slice(0,23);
           // console.log(data[i].title);
           // console.log(data[i].num_comments);
           this.titles.push(data[i].title);
@@ -111,7 +116,7 @@ export default {
           this.displayNames.push(data[i].subreddit.display_name);
           this.limit=data.length;
           this.dateArray.push(date);
-          console.log('da is'+date)
+          // console.log('da is'+date)
 
         }
         
@@ -132,6 +137,45 @@ export default {
       this.$router.push({name:'ImageLink',params:{id:indexId}}); 
       
 
+    },
+    iconUpvote:function(index){
+      console.log('upvote');
+      console.log(index)
+      utils.r.getHot({limit:100}).then(
+        data=>
+        {
+          console.log(data);
+          for(var i=0;i<100;i++){
+            if(index==i)
+            {
+              console.log('i is'+i)
+              console.log('and id is'+data[i].id) 
+              utils.r.getSubmission(data[i].id).upvote().then(res=>console.log(res));
+
+            }
+            this.upvote=1;
+          }
+        }).catch(err=>console.log('error is'+err))
+
+
+    },
+    downVote:function(index)
+    {
+      console.log('downVote')
+      utils.r.getHot({limit:100}).then(
+        data=>
+        {
+          console.log(data);
+          for(var i=0;i<100;i++){
+            if(index==i)
+            {
+              console.log('i is'+i)
+              console.log('and id is'+data[i].id) 
+              utils.r.getSubmission(data[i].id).downvote().then(res=>console.log(res));
+            }
+            this.downvote=1;
+          }
+        }).catch(err=>console.log('error is'+err))
     },
     commentPage:function(indexId)
     {
@@ -183,6 +227,9 @@ export default {
 h1, h2 {
   font-weight: normal;
 }
+.title{
+  font-size: medium;
+}
 .nextPage{
   text-align: left;
   padding: 20px;
@@ -199,12 +246,14 @@ img{
 .homeInfo{
   margin-left: 190px;
   font-size: 13px;
+
 }
 .comments{
   margin-left: 190px;
   font-family: 'Anton';
   font-size: small;
   font-size: 10px;
+  cursor: pointer;
 }
 .name{
   color: #888;
@@ -215,6 +264,7 @@ img{
   width: 100px;
   height: 80px;
   padding-left: 10px;
+  cursor: pointer;
 }
 .icon{
   color:#888;
@@ -231,4 +281,5 @@ img{
 .hello{
   background-color: #f6eec7;
 }
+
 </style>

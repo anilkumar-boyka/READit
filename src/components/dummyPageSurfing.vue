@@ -10,7 +10,7 @@
 
 			   <img v-on:click="imageLink(olCount+index-1)" class="imgThumbnails" :src="thumbnails[index]">
 			   <div class="homeInfo">
-				 {{title}}
+				 <span>{{title}}</span>
 				 <p class="name">Submitted by {{name[index]}} to {{displayNames[index]}}</p>
 			    </div>
 			   <p class="comments" v-on:click="commentsFunction(olCount+index-1)">{{comments [index]}} comments</p>
@@ -129,6 +129,20 @@ export default {
 	 {
 	 		this.start();
 	 }
+
+	 //logic to get hours between two date
+		// var dateOne = "6 May, 2015 14:45";
+		// var dateTwo = "7 May, 2015 14:45";
+		// var d1=" Mar 03 2020 07:48:1";
+		// var d2="Mar 04 2020 07:48:1"
+		// d1 =new Date(d1);
+		// d2=new Date(d2);
+		// alert(d1);
+
+		// var m= Math.abs(d2 - d1);
+		// var h=m/36e5;
+		// alert(h);
+
   
 };
 </script>
@@ -151,6 +165,7 @@ img{
   font-family: 'Anton';
   font-size: small;
   font-size: 10px;
+  cursor: pointer;
 }
 .name{
   color: #888;
@@ -182,6 +197,7 @@ img{
   padding:20px;
   
 }
+
 
 
 </style>

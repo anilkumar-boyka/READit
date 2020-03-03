@@ -10,7 +10,7 @@
 
 			   <img v-on:click="imageLink(olCount+index-1)" class="imgThumbnails" :src="thumbnails[index]">
 			   <div class="homeInfo">
-				 {{title}}
+				 <span>{{title}}</span>
 				 <p class="name">Submitted on {{dateArray[index]}}
 				 by {{name[index]}} to {{displayNames[index]}}</p>
 			    </div>
@@ -20,14 +20,13 @@
 			</li>
 	   </ol>
 	   	<div>
-	 		<div class="nextPage">
+	 		<div v-if="titleCount" class="nextPage">
 		   		view more:
 	    		<span  v-on:click="pageSurfing"><button v-once type="button">next</button></span>
-	   		
-	   		<!-- <div v-else>
-	   			Oops!No posts found
-	   		</div>	 -->
 	   		</div>
+	   		<div  class="oops" v-else>
+	   			Oops! No posts found further
+	   		</div>	
    </div>
   </div>
 
@@ -117,6 +116,8 @@ export default {
 					console.log(l+26)
 				  console.log(data[27].title)	
 				  date=new Date(data[i].created_utc*1000)
+				  date=date.toString();
+          		  date=date.slice(0,23);
 				  // console.log('inside loop'+newExtendedData[4].title);
 				  this.titles.push(data[i].title);
 				  this.dateArray.push(date);
@@ -160,12 +161,14 @@ img{
 .homeInfo{
   margin-left: 190px;
   font-size: 13px;
+
 }
 .comments{
   margin-left: 190px;
   font-family: 'Anton';
   font-size: small;
   font-size: 10px;
+  cursor: pointer;
 }
 .name{
   color: #888;
@@ -176,6 +179,7 @@ img{
   width: 100px;
   height: 80px;
   padding-left: 10px;
+  cursor: pointer;
 }
 .icon{
   color:#888;
@@ -197,6 +201,13 @@ img{
   padding:20px;
   
 }
-
+.homeInfo span{
+	font-size: medium;
+}
+.oops{
+	color: red;
+	padding-bottom: 23px;
+	opacity: 0.7;
+}
 
 </style>

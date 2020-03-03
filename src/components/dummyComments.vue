@@ -11,13 +11,12 @@
         <div>
           <li :key="comment" v-for="(comment,index) in comments">
             <div class=comments>
-              <i class=" icon fas fa-cog fa-lg"></i><span class="actualComment">{{comment}}</span><br>
-               <div class="commentName">
-                comment by  <span class="name">{{commentName[index]}}</span>
-              </div>
+              <i class=" icon fas fa-cog fa-lg"></i><span class="actualComment">{{comment}}</span>
               <i class=" icon fas fa-cog fa-lg"></i> 
               
-              
+              <div class="commentName">
+                comment by  <span class="name">{{commentName[index]}}</span>
+              </div>
             </div>
           </li>
       </div>
@@ -49,7 +48,7 @@ export default {
   },
   
   mounted:
-    function()
+  	function()
      {
        // console.log("cmt is")
        // console.log(this.routeId)
@@ -115,8 +114,7 @@ export default {
   text-shadow: 0.8px 0.8px 2px grey;
 }
 .icon{
-  padding-right: 20px;
-  min-height: 20px;
+  /*min-height: 20px;*/
 }
 .unorderList{
   list-style-type:none
@@ -125,7 +123,7 @@ export default {
   padding-left: 45px;
   font-family: 'Sorts Mill Goudy';
   color:black;
-  padding-bottom: 20px;
+  /*padding-bottom: 20px;*/
   /*opacity: 0.7;*/
 }
 .main{
@@ -144,6 +142,7 @@ export default {
 .actualComment{
   padding-left: 30px;
   display: inline-block;
+  position: absolute;
 }
 </style>
 
