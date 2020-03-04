@@ -1,6 +1,7 @@
 <template>
 
   <div class="main">
+    {{upvoteId}}
      <h1 v-if="title"class="title">{{title}}</h1>
      <div>
         <img class="images" :src="images">
@@ -8,14 +9,20 @@
       <hr>
     
       <ul class="unorderList" v-if="comments">
-        <div>
+        <div class="group">
           <li :key="comment" v-for="(comment,index) in comments">
             <div class=comments>
-              <i class=" icon fas fa-cog fa-lg"></i><span class="actualComment">{{comment}}</span><br>
-               <div class="commentName">
+              <span v-on:click="commentUpvote(index)" :class="{red:true}">
+                <i class=" icon fas fa-cog fa-lg" ></i>
+              </span>
+              <span class="actualComment">{{comment}}
+              <div class="commentName">
                 comment by  <span class="name">{{commentName[index]}}</span>
-              </div>
-              <i class=" icon fas fa-cog fa-lg"></i> 
+                <span class="score">{{score[index]}} points</span>
+              </div></span><br>
+               <span v-on:click="commentDownvote(index)" :class="{blue:true}">
+                <i class=" icon fas fa-cog fa-lg"></i> 
+              </span>
               
               
             </div>
@@ -43,7 +50,9 @@ export default {
      commentName:[],
      title:null,
      images:null,
-     score:[]
+     score:[],
+     upvoteId:0,
+     downvoteId:[20,30,40]
       
     };
   },
@@ -51,6 +60,8 @@ export default {
   mounted:
     function()
      {
+       // utils.r.getComment('fje1w1m').upvote();
+       // utils.r.getComment('fje1w1m').downvote();
        // console.log("cmt is")
        // console.log(this.routeId)
        utils.r.getHot({limit:100}).then(
@@ -96,7 +107,53 @@ export default {
         //   console.log(CommentData.comments[i].body);
         // }
         // );
-     }
+     },
+
+  methods:{
+    commentUpvote:function(index)
+    { var n=[];
+      console.log('upvote')
+      console.log(index)
+      console.log(this.commentId)
+          utils.r.getSubmission(this.commentId).expandReplies({limit: 2, depth: 1}).then(CommentData=>
+        {
+          for(var i=0;i<50;i++){
+           if(i==index)
+            {
+              utils.r.getComment(CommentData.comments[i].id).upvote(); 
+              console.log(CommentData.comments[i].id)
+              console.log('score is')
+              console.log(this.score[index])
+              console.log('after click')
+              n=this.score[index]++
+              console.log(n)
+              this.upvoteId++;
+              this.downvoteId[index]++;
+            }
+          } 
+          }
+        ).catch(err=>console.log('error is'+err))
+
+    },
+    commentDownvote:function(index)
+    {
+      console.log('downvote')
+      console.log(index)
+      console.log(this.commentId)
+          utils.r.getSubmission(this.commentId).expandReplies({limit: 2, depth: 1}).then(CommentData=>
+        {
+          for(var i=0;i<100;i++){
+           if(i==index)
+            {
+              utils.r.getComment(CommentData.comments[i].id).downvote(); 
+              console.log(CommentData.comments[i].id)
+            }
+          } 
+          }
+        ).catch(err=>console.log('error is'+err))
+
+    }
+  },
 };
 </script>
 
@@ -106,7 +163,8 @@ export default {
   text-align: left;
   margin:20px;
   font-family: 'Fredoka One' ;
-  color:grey
+  color:grey;
+  padding: 10px;
 
 }
 .title{
@@ -122,11 +180,13 @@ export default {
   list-style-type:none
 }
 .commentName{
-  padding-left: 45px;
+  /*padding-left: 25px;*/
   font-family: 'Sorts Mill Goudy';
   color:black;
   padding-bottom: 20px;
   /*opacity: 0.7;*/
+  position: absolute;
+  /*padding-left: 70px;*/
 }
 .main{
   background-color: #f1f3f4;
@@ -144,6 +204,21 @@ export default {
 .actualComment{
   padding-left: 30px;
   display: inline-block;
+}
+.score{
+  /*font-family: 'Sorts Mill Goudy';*/
+  font-family: 'Dosis', sans-serif;
+  display: inline-block;
+  margin-left :20px;
+  color:grey;
+  opacity: 0.7;
+  font-size: small;
+}
+.red{
+  color:#ff6464;
+}
+.blue{
+  color:#3fc5f0;
 }
 </style>
 

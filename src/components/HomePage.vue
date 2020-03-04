@@ -3,21 +3,31 @@
   <div class="hello">
     <ol v-if="titles">
 
-    <li :key="title"v-for="(title,index) in titles">
-      <span class=" icon"><i v-on:click="iconUpvote(index)" class="fas fa-arrow-up fa-lg"></i><span class="count">{{upsCount[index]}}</span><i v-on:click="downVote(index)"class="fas fa-arrow-down fa-lg"></i></span>
+      <li :key="title"v-for="(title,index) in titles">
+        <span class="icon">
+          <span :class="{orange:upvoteArray[index]}">
+            <i v-on:click="iconUpvote(index)" class="fas fa-arrow-up fa-lg"></i>    
+          </span> 
+            <span class="count">
+              {{upsCount[index]}}
+            </span> 
+            <span :class="{purple:downvoteArray[index]}"> 
+              <i v-on:click="downVote(index)"class="fas fa-arrow-down fa-lg"></i>
+            </span>  
+        </span>
 
-      <div class="imgText">
+        <div class="imgText">
 
-       <img v-on:click="imageLink(index)" class="imgThumbnails" :src="thumbnails[index]">
-       <div class="homeInfo">
-        <span class="title">{{title}}</span>
-        <p class="name">Submitted on {{dateArray[index]}}
-        by {{name[index]}} to {{displayNames[index]}}</p>
-       </div>
-       <p class="comments" v-on:click="commentPage(index)">{{comments [index]}} comments</p>
-      </div>
-      <hr>
-    </li>
+         <img v-on:click="imageLink(index)" class="imgThumbnails" :src="thumbnails[index]">
+         <div class="homeInfo">
+          <span class="title">{{title}}</span>
+          <p class="name">Submitted on {{dateArray[index]}}
+          by {{name[index]}} to {{displayNames[index]}}</p>
+         </div>
+         <p class="comments" v-on:click="commentPage(index)">{{comments [index]}} comments</p>
+        </div>
+        <hr>
+      </li>
    </ol>
    <div class="nextPage">view more:
     <span v-on:click="pageSurfing"><button type="button">next</button></span>
@@ -43,7 +53,9 @@ export default {
       displayNames:[],
       limit:null,
       dateArray:[],
-      upvote:null,
+      upvoteArray:[],
+      downvoteArray:[],
+      upId:null,
       downvote:null
       
       };
@@ -139,6 +151,7 @@ export default {
 
     },
     iconUpvote:function(index){
+      var vm=this;
       console.log('upvote');
       console.log(index)
       utils.r.getHot({limit:100}).then(
@@ -151,9 +164,19 @@ export default {
               console.log('i is'+i)
               console.log('and id is'+data[i].id) 
               utils.r.getSubmission(data[i].id).upvote().then(res=>console.log(res));
+              this.downvoteArray[index]='false';
+              this.upvoteArray[index]='true';
+              console.log('index'+ i);
+              console.log(this.upvoteArray[index])
+              console.log(this.downvoteArray[index])
+              console.log(this.downvoteArray)
+              console.log('before')
+              console.log(this.upsCount[index])
+              console.log('after')
+              console.log(this.upsCount[index]+1)
 
+              
             }
-            this.upvote=1;
           }
         }).catch(err=>console.log('error is'+err))
 
@@ -162,18 +185,25 @@ export default {
     downVote:function(index)
     {
       console.log('downVote')
+      console.log(index)
       utils.r.getHot({limit:100}).then(
         data=>
         {
-          console.log(data);
+          // console.log(data);
           for(var i=0;i<100;i++){
             if(index==i)
             {
               console.log('i is'+i)
               console.log('and id is'+data[i].id) 
               utils.r.getSubmission(data[i].id).downvote().then(res=>console.log(res));
+              console.log(this.upvoteArray[index]);
+              this.upvoteArray[index]='false';
+              console.log(this.upvoteArray[index]);
+              this.downvoteArray[index]='true';
+              console.log(this.downvoteArray)
+
             }
-            this.downvote=1;
+            // this.downvote=1;
           }
         }).catch(err=>console.log('error is'+err))
     },
@@ -281,5 +311,10 @@ img{
 .hello{
   background-color: #f6eec7;
 }
-
+.orange{
+ color: #ff6464;
+}
+.purple{
+  color: #be9fe1;
+}
 </style>
